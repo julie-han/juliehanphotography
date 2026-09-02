@@ -1,0 +1,194 @@
+<header class="site-header">
+  <nav class="nav">
+    <a href="/" class="logo">Julie Han Photography</a>
+
+    <button
+      class="menu-button"
+      type="button"
+      aria-label="Open menu"
+      aria-expanded="false"
+      aria-controls="mobile-menu"
+    >
+      <span></span>
+      <span></span>
+    </button>
+
+    <div class="nav-links">
+      <a href="/portfolio">Portfolio</a>
+      <a href="/about">About</a>
+      <a href="/contact">Contact</a>
+    </div>
+  </nav>
+
+  <div class="mobile-menu" id="mobile-menu">
+    <a href="/portfolio">Portfolio</a>
+    <a href="/about">About</a>
+    <a href="/contact">Contact</a>
+  </div>
+</header>
+
+<script>
+  const menuButton = document.querySelector(".menu-button");
+  const mobileMenu = document.querySelector(".mobile-menu");
+
+  const closeMenu = () => {
+    menuButton?.setAttribute("aria-expanded", "false");
+    mobileMenu?.classList.remove("open");
+  };
+
+  menuButton?.addEventListener("click", (event) => {
+    event.stopPropagation();
+
+    const isOpen = menuButton.getAttribute("aria-expanded") === "true";
+
+    if (isOpen) {
+      closeMenu();
+    } else {
+      menuButton.setAttribute("aria-expanded", "true");
+      mobileMenu?.classList.add("open");
+    }
+  });
+
+  mobileMenu?.addEventListener("click", (event) => {
+    event.stopPropagation();
+  });
+
+  mobileMenu?.querySelectorAll("a").forEach((link) => {
+    link.addEventListener("click", closeMenu);
+  });
+
+  document.addEventListener("click", () => {
+    const isOpen = menuButton?.getAttribute("aria-expanded") === "true";
+
+    if (isOpen) {
+      closeMenu();
+    }
+  });
+</script>
+
+<style>
+  .site-header {
+    position: relative;
+    border-bottom: 1px solid var(--color-border);
+    background: var(--color-background);
+    z-index: 100;
+  }
+
+  .nav {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 1.25rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .logo {
+    font-family: var(--font-heading);
+    font-size: 1.4rem;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 2rem;
+  }
+
+  .nav-links a {
+    font-size: 0.9rem;
+    transition: opacity 0.2s ease;
+  }
+
+  .nav-links a:hover {
+    opacity: 0.6;
+  }
+
+  .menu-button {
+    display: none;
+    width: 2rem;
+    height: 2rem;
+    padding: 0;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    position: relative;
+  }
+
+  .menu-button span {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: var(--color-text);
+    transition:
+      transform 0.2s ease,
+      top 0.2s ease;
+  }
+
+  .menu-button span:first-child {
+    top: 8px;
+  }
+
+  .menu-button span:last-child {
+    top: 15px;
+  }
+
+  .mobile-menu {
+    display: none;
+  }
+
+  @media (max-width: 600px) {
+    .site-header {
+      position: sticky;
+      top: 0;
+    }
+
+    .nav {
+      padding: 1rem 1.5rem;
+    }
+
+    .logo {
+      font-size: 1.1rem;
+    }
+
+    .nav-links {
+      display: none;
+    }
+
+    .menu-button {
+      display: block;
+    }
+
+    .menu-button[aria-expanded="true"] span:first-child {
+      top: 11px;
+      transform: rotate(45deg);
+    }
+
+    .menu-button[aria-expanded="true"] span:last-child {
+      top: 11px;
+      transform: rotate(-45deg);
+    }
+
+    .mobile-menu {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      padding: 0 1.5rem;
+      max-height: 0;
+      overflow: hidden;
+      background: var(--color-background);
+      transition:
+        max-height 0.3s ease,
+        padding 0.3s ease;
+    }
+
+    .mobile-menu.open {
+      max-height: 300px;
+      padding: 1.5rem;
+      border-top: 1px solid var(--color-border);
+    }
+
+    .mobile-menu a {
+      font-size: 1rem;
+    }
+  }
+</style>

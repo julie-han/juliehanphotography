@@ -1,0 +1,54 @@
+---
+import Layout from "../layouts/Layout.astro";
+import PortfolioSection from "../components/PortfolioSection.astro";
+import { getGalleryImages } from "../lib/cloudinary.js";
+
+const [weddings, engagements, other] = await Promise.all([
+  getGalleryImages("weddings", { defaultAlt: "Wedding photography" }),
+  getGalleryImages("engagements", { defaultAlt: "Engagement photography" }),
+  getGalleryImages("other"),
+]);
+---
+
+<Layout title="Portfolio | Julie Han Photography">
+  <main>
+    <section class="portfolio-intro">
+      <h1>Portfolio</h1>
+    </section>
+
+    <div id="weddings">
+      <PortfolioSection title="Weddings" variant="portfolio" images={weddings} />
+    </div>
+
+    <div id="engagements">
+      <PortfolioSection
+        title="Engagements"
+        variant="portfolio"
+        images={engagements}
+      />
+    </div>
+
+    <div id="other">
+      <PortfolioSection title="Other" variant="portfolio" images={other} />
+    </div>
+  </main>
+</Layout>
+
+<style>
+  .portfolio-intro {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 4.5rem 2rem 2rem;
+  }
+
+  .portfolio-intro h1 {
+    margin: 0;
+    font-size: clamp(2.5rem, 4vw, 4rem);
+  }
+
+  @media (max-width: 700px) {
+    .portfolio-intro {
+      padding: 3.5rem 1.5rem 1rem;
+    }
+  }
+</style>

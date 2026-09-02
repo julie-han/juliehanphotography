@@ -1,0 +1,76 @@
+---
+const {
+  title = "Let's work together.",
+  text = "Based in Erie, PA and available wherever your story takes you.",
+  linkText = "Get in touch →",
+  link = "/contact",
+} = Astro.props;
+---
+
+<section class="cta">
+  <div class="cta-inner">
+    <h2>{title}</h2>
+
+    <p>{text}</p>
+
+    <a href={link} class="cta-link">
+      {linkText}
+    </a>
+  </div>
+</section>
+
+<style>
+  .cta {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 4rem 2rem 6rem;
+  }
+
+  .cta-inner {
+    max-width: 650px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  h2 {
+    margin: 0 0 1rem;
+    font-size: clamp(2rem, 3vw, 3rem);
+    line-height: 1;
+  }
+
+  p {
+    max-width: 500px;
+    margin: 0 auto 1.5rem;
+    color: var(--color-muted);
+    font-size: 0.95rem;
+    line-height: 1.7;
+  }
+
+  .cta-link {
+    display: inline-block;
+    padding-bottom: 0.3rem;
+    border-bottom: 1px solid var(--color-text);
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    transition: opacity 0.2s ease;
+  }
+
+  .cta-link:hover {
+    opacity: 0.55;
+  }
+
+  @media (max-width: 600px) {
+    .cta {
+      padding: 3rem 1.5rem 4.5rem;
+    }
+
+    h2 {
+      font-size: 2rem;
+    }
+
+    p {
+      font-size: 0.9rem;
+    }
+  }
+</style>

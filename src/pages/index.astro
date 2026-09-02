@@ -1,17 +1,45 @@
 ---
+import Layout from "../layouts/Layout.astro";
+import Hero from "../components/Hero.astro";
+import PortfolioSection from "../components/PortfolioSection.astro";
+import CTA from "../components/CTA.astro";
+import { getGalleryImages } from "../lib/cloudinary.js";
 
+const [weddings, engagements, other] = await Promise.all([
+  getGalleryImages("weddings", { limit: 3, defaultAlt: "Wedding photography" }),
+  getGalleryImages("engagements", {
+    limit: 3,
+    defaultAlt: "Engagement photography",
+  }),
+  getGalleryImages("other", { limit: 3 }),
+]);
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<Layout title="Julie Han Photography">
+  <main>
+    <Hero />
+
+    <PortfolioSection
+      title="Weddings"
+      variant="home"
+      link="/portfolio#weddings"
+      images={weddings}
+    />
+
+    <PortfolioSection
+      title="Engagements"
+      variant="home"
+      link="/portfolio#engagements"
+      images={engagements}
+    />
+
+    <PortfolioSection
+      title="Other"
+      variant="home"
+      link="/portfolio#other"
+      images={other}
+    />
+
+    <CTA />
+  </main>
+</Layout>

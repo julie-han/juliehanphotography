@@ -1,0 +1,275 @@
+---
+import Layout from "../layouts/Layout.astro";
+
+const submitted = Astro.url.searchParams.get("success") === "true";
+---
+
+<Layout title="Contact | Julie Han Photography">
+  <main>
+    <section class="contact-intro">
+      <h1>Let's talk.</h1>
+
+      <p>
+        Tell me a little about what you're planning, and I'll be in touch.
+      </p>
+    </section>
+
+    <section class="contact-content">
+      {submitted ? (
+        <div class="success-message">
+          <p class="eyebrow">Thank you</p>
+
+          <h2>Your inquiry has been sent.</h2>
+
+          <p>
+            Thanks for reaching out. I'll get back to you as soon as I can.
+          </p>
+
+          <a href="/" class="success-link">
+            Back to home →
+          </a>
+        </div>
+      ) : (
+        <form class="contact-form" method="POST" action="/api/submit">
+          <div class="form-row">
+            <div class="form-field">
+              <label for="name">Name</label>
+              <input
+                type="text"
+                id="name"
+                name="name"
+                autocomplete="name"
+                required
+              />
+            </div>
+
+            <div class="form-field">
+              <label for="email">Email</label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                autocomplete="email"
+                required
+              />
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-field">
+              <label for="date">Event date</label>
+              <input
+                type="date"
+                id="date"
+                name="date"
+              />
+            </div>
+
+            <div class="form-field">
+              <label for="location">Location</label>
+              <input
+                type="text"
+                id="location"
+                name="location"
+                autocomplete="address-level2"
+              />
+            </div>
+          </div>
+
+          <div class="form-field">
+            <label for="type">What are you planning?</label>
+
+            <select id="type" name="type">
+              <option value="">Select one</option>
+              <option value="wedding">Wedding</option>
+              <option value="engagement">Engagement</option>
+              <option value="family">Family</option>
+              <option value="senior">Senior</option>
+              <option value="other">Something else</option>
+            </select>
+          </div>
+
+          <div class="form-field">
+            <label for="message">Tell me a little more</label>
+
+            <textarea
+              id="message"
+              name="message"
+              rows="6"
+              placeholder="Tell me about your plans..."
+            ></textarea>
+          </div>
+
+          <button type="submit">
+            Send inquiry →
+          </button>
+        </form>
+      )}
+    </section>
+  </main>
+</Layout>
+
+<style>
+  .contact-intro {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 4.5rem 2rem 2.5rem;
+    text-align: center;
+  }
+
+  .contact-intro h1 {
+    margin: 0 0 1rem;
+    font-size: clamp(2.5rem, 4vw, 4rem);
+    line-height: 1;
+  }
+
+  .contact-intro p {
+    margin: 0 auto;
+    max-width: 500px;
+    color: var(--color-muted);
+    font-size: 0.95rem;
+    line-height: 1.7;
+  }
+
+  .contact-content {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 1rem 2rem 6rem;
+  }
+
+  .contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+
+  .form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  label {
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  input,
+  select,
+  textarea {
+    width: 100%;
+    border: 1px solid var(--color-border);
+    border-radius: 0;
+    padding: 0.8rem 0;
+    background: transparent;
+    color: var(--color-text);
+    font-size: 0.95rem;
+    outline: none;
+  }
+
+  input,
+  select,
+  textarea {
+    border-top: none;
+    border-left: none;
+    border-right: none;
+  }
+
+  input:focus,
+  select:focus,
+  textarea:focus {
+    border-color: var(--color-text);
+  }
+
+  textarea {
+    resize: vertical;
+    min-height: 140px;
+  }
+
+  textarea::placeholder {
+    color: var(--color-muted);
+    opacity: 0.7;
+  }
+
+  button {
+    align-self: flex-start;
+    border: none;
+    border-bottom: 1px solid var(--color-text);
+    padding: 0 0 0.3rem;
+    background: transparent;
+    color: var(--color-text);
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    transition: opacity 0.2s ease;
+  }
+
+  button:hover {
+    opacity: 0.55;
+  }
+
+  /* Success state */
+
+  .success-message {
+    max-width: 550px;
+    margin: 2rem auto 0;
+    text-align: center;
+  }
+
+  .eyebrow {
+    margin: 0 0 1rem;
+    color: var(--color-muted);
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .success-message h2 {
+    margin: 0 0 1rem;
+    font-size: clamp(2rem, 3vw, 3rem);
+    line-height: 1;
+  }
+
+  .success-message p:not(.eyebrow) {
+    margin: 0 auto 1.5rem;
+    color: var(--color-muted);
+    font-size: 0.95rem;
+    line-height: 1.7;
+  }
+
+  .success-link {
+    display: inline-block;
+    padding-bottom: 0.3rem;
+    border-bottom: 1px solid var(--color-text);
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    transition: opacity 0.2s ease;
+  }
+
+  .success-link:hover {
+    opacity: 0.55;
+  }
+
+  @media (max-width: 600px) {
+    .contact-intro {
+      padding: 3.5rem 1.5rem 2rem;
+    }
+
+    .contact-content {
+      padding: 0 1.5rem 4.5rem;
+    }
+
+    .form-row {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+  }
+</style>

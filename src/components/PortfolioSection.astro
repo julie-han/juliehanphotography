@@ -1,0 +1,193 @@
+---
+const {
+  title,
+  images,
+  variant = "default",
+  link,
+} = Astro.props;
+---
+
+<section class:list={["portfolio-section", variant]}>
+  <div class="section-header">
+    <h2>{title}</h2>
+
+    {link && (
+      <a href={link} class="section-link">
+        See more →
+      </a>
+    )}
+  </div>
+
+  <div class="portfolio-grid">
+    {images.map((image) => (
+      <figure
+        class:list={[
+          "portfolio-image",
+          image.orientation ?? "landscape",
+        ]}
+      >
+        <img
+          src={image.src}
+          alt={image.alt}
+          loading="lazy"
+        />
+      </figure>
+    ))}
+  </div>
+</section>
+
+<style>
+  .portfolio-section {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 2rem 2rem 3.5rem;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+  }
+
+  h2 {
+    margin: 0;
+    font-size: clamp(1.7rem, 2.2vw, 2.2rem);
+    line-height: 1;
+  }
+
+  .section-link {
+    flex-shrink: 0;
+    padding-bottom: 0.25rem;
+    border-bottom: 1px solid var(--color-text);
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    transition: opacity 0.2s ease;
+  }
+
+  .section-link:hover {
+    opacity: 0.55;
+  }
+
+  /* ------------------------------
+     Full portfolio masonry
+     ------------------------------ */
+
+  .portfolio-grid {
+    columns: 3;
+    column-gap: 0.75rem;
+  }
+
+  .portfolio-image {
+    break-inside: avoid;
+    margin: 0 0 0.75rem;
+  }
+
+  .portfolio-image img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  /* ------------------------------
+     Homepage
+     ------------------------------ */
+
+  .portfolio-section.home {
+    padding-top: 3rem;
+    padding-bottom: 3.5rem;
+  }
+
+  .portfolio-section.home .portfolio-grid {
+    display: flex;
+    gap: 0.75rem;
+    columns: unset;
+    align-items: stretch;
+  }
+
+  .portfolio-section.home .portfolio-image {
+    min-width: 0;
+    height: 320px;
+    margin: 0;
+    overflow: hidden;
+  }
+
+  .portfolio-section.home .portfolio-image.portrait {
+    flex: 1;
+  }
+
+  .portfolio-section.home .portfolio-image.landscape {
+    flex: 1.6;
+  }
+
+  .portfolio-section.home .portfolio-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* ------------------------------
+     Tablet
+     ------------------------------ */
+
+  @media (max-width: 900px) {
+    .portfolio-grid {
+      columns: 2;
+    }
+
+    .portfolio-section.home .portfolio-image {
+      height: 260px;
+    }
+
+    .portfolio-section.home .portfolio-image.portrait {
+      flex: 1;
+    }
+
+    .portfolio-section.home .portfolio-image.landscape {
+      flex: 1.6;
+    }
+  }
+
+  /* ------------------------------
+     Mobile
+     ------------------------------ */
+
+  @media (max-width: 600px) {
+    .portfolio-section {
+      padding: 1.5rem 1.5rem 3rem;
+    }
+
+    .section-header {
+      margin-bottom: 0.85rem;
+    }
+
+    h2 {
+      font-size: 1.8rem;
+    }
+
+    .section-link {
+      font-size: 0.68rem;
+    }
+
+    .portfolio-grid {
+      columns: 1;
+    }
+
+    .portfolio-section.home {
+      padding-top: 2.5rem;
+      padding-bottom: 3rem;
+    }
+
+    .portfolio-section.home .portfolio-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .portfolio-section.home .portfolio-image {
+      height: 300px;
+      flex: none;
+    }
+  }
+</style>

@@ -1,0 +1,102 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout title="About | Julie Han Photography">
+  <main>
+    <section class="about">
+      <div class="about-image">
+        <img
+          src="/images/hero-2.jpg"
+          alt="Julie Han Photography"
+        />
+      </div>
+
+      <div class="about-content">
+        <p class="eyebrow">About</p>
+
+        <h1>Julie Han Photography</h1>
+
+        <p>
+          I'm Julie, a photographer based in Erie, Pennsylvania,
+          specializing in weddings, engagements, and couples.
+        </p>
+
+        <p>
+          I also photograph families, seniors, pets, birthdays,
+          holidays, and whatever else comes my way.
+        </p>
+
+        <a href="/contact" class="about-link">
+          Get in touch →
+        </a>
+      </div>
+    </section>
+  </main>
+</Layout>
+
+<style>
+  .about {
+    max-width: var(--max-width);
+    min-height: calc(100vh - 76px);
+    margin: 0 auto;
+    padding: 5rem 2rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(3rem, 8vw, 8rem);
+    align-items: center;
+  }
+
+  .about-image {
+    overflow: hidden;
+  }
+
+  .about-image img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .about-content {
+    max-width: 500px;
+  }
+
+  .eyebrow {
+    margin: 0 0 1.25rem;
+    font-size: 0.7rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+  }
+
+  h1 {
+    margin-bottom: 1.5rem;
+    font-size: clamp(2.5rem, 4vw, 4rem);
+    line-height: 1;
+  }
+
+  .about-content p:not(.eyebrow) {
+    margin-bottom: 1.25rem;
+    color: var(--color-muted);
+    line-height: 1.7;
+  }
+
+  .about-link {
+    display: inline-block;
+    margin-top: 1.5rem;
+    padding-bottom: 0.4rem;
+    border-bottom: 1px solid var(--color-text);
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  @media (max-width: 700px) {
+    .about {
+      min-height: auto;
+      padding: 4rem 1.5rem 5rem;
+      grid-template-columns: 1fr;
+      gap: 3rem;
+    }
+  }
+</style>
