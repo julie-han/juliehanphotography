@@ -1,15 +1,17 @@
+import { env } from "cloudflare:workers";
+
 const CACHE_TTL_MS = 5 * 60 * 1000;
 const cache = new Map();
 
 function buildImageUrl(publicId, format, width = 1600) {
-  const cloudName = import.meta.env.CLOUDINARY_CLOUD_NAME;
+  const cloudName = env.CLOUDINARY_CLOUD_NAME;
   return `https://res.cloudinary.com/${cloudName}/image/upload/f_auto,q_auto,w_${width}/${publicId}.${format}`;
 }
 
 async function searchByTag(tag) {
-  const cloudName = import.meta.env.CLOUDINARY_CLOUD_NAME;
-  const apiKey = import.meta.env.CLOUDINARY_API_KEY;
-  const apiSecret = import.meta.env.CLOUDINARY_API_SECRET;
+  const cloudName = env.CLOUDINARY_CLOUD_NAME;
+  const apiKey = env.CLOUDINARY_API_KEY;
+  const apiSecret = env.CLOUDINARY_API_SECRET;
 
   const response = await fetch(
     `https://api.cloudinary.com/v1_1/${cloudName}/resources/search`,

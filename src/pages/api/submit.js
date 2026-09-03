@@ -1,4 +1,5 @@
 import { Resend } from "resend";
+import { env } from "cloudflare:workers";
 
 export async function POST({ request, redirect }) {
   try {
@@ -23,7 +24,7 @@ export async function POST({ request, redirect }) {
       );
     }
 
-    const resend = new Resend(import.meta.env.RESEND_API_KEY);
+    const resend = new Resend(env.RESEND_API_KEY);
 
     const { error } = await resend.emails.send({
       from: "Julie Han Photography <inquiry@juliehanphotography.com>",
