@@ -1,0 +1,160 @@
+---
+import Layout from "../layouts/Layout.astro";
+import CTA from "../components/CTA.astro";
+
+const serviceGroups = [
+  {
+    title: "Services",
+    services: [
+      {
+        name: "Weddings",
+        description:
+          "4–10 hour day-of coverage, with a second shooter available upon request.",
+      },
+      {
+        name: "Engagement Sessions",
+        description:
+          "A relaxed session to celebrate your engagement, on location or somewhere that means something to you.",
+      },
+      {
+        name: "Family Sessions",
+        description:
+          "Portraits that capture your family as it is right now, kids, pets, and all.",
+      },
+      {
+        name: "Content Creation",
+        description:
+          "iPhone content shooting and editing: reels and TikToks from your special day.",
+      },
+    ],
+  },
+  {
+    title: "For Photographers",
+    services: [
+      {
+        name: "Second Shooting",
+        description:
+          "Hired as an additional shooter for your wedding or session, working alongside your primary photographer.",
+      },
+      {
+        name: "Content Shooting",
+        description:
+          "iPhone content shooting: behind-the-scenes video and social-ready footage.",
+      },
+      {
+        name: "Content Editing",
+        description:
+          "Editing raw footage into reels and TikToks, for you or your business.",
+      },
+    ],
+  },
+];
+---
+
+<Layout title="Services | Julie Han Photography">
+  <main>
+    <section class="services-intro">
+      <p class="eyebrow">Services</p>
+      <h1>What I Offer</h1>
+    </section>
+
+    <section class="services">
+      {
+        serviceGroups.map((group) => (
+          <div class="service-group">
+            <h2>{group.title}</h2>
+            <ul class="service-list">
+              {group.services.map((service) => (
+                <li>
+                  <span class="service-name">{service.name}</span>
+                  {service.description && (
+                    <p class="service-description">{service.description}</p>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+    </section>
+
+    <CTA
+      title="Interested in working together?"
+      text="Reach out to check availability and get more details."
+    />
+  </main>
+</Layout>
+
+<style>
+  .services-intro {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 4.5rem 2rem 2rem;
+  }
+
+  .eyebrow {
+    margin: 0 0 1.25rem;
+    font-size: 0.7rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+  }
+
+  .services-intro h1 {
+    margin: 0;
+    font-size: clamp(2.5rem, 4vw, 4rem);
+  }
+
+  .services {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 2rem 2rem 3rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(3rem, 8vw, 6rem);
+  }
+
+  .service-group h2 {
+    margin: 0 0 1.5rem;
+    font-size: 1.6rem;
+  }
+
+  .service-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .service-list li {
+    padding: 1.25rem 0;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .service-list li:last-child {
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .service-name {
+    font-family: var(--font-heading);
+    font-size: 1.3rem;
+  }
+
+  .service-description {
+    margin: 0.5rem 0 0;
+    color: var(--color-muted);
+    font-size: 0.9rem;
+    line-height: 1.6;
+  }
+
+  @media (max-width: 700px) {
+    .services-intro {
+      padding: 3.5rem 1.5rem 1rem;
+    }
+
+    .services {
+      grid-template-columns: 1fr;
+      gap: 3rem;
+      padding: 1rem 1.5rem 3rem;
+    }
+  }
+</style>

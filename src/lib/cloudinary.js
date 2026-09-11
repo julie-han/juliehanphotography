@@ -8,7 +8,7 @@ function buildImageUrl(publicId, format, width = 1600) {
   return `https://res.cloudinary.com/${cloudName}/image/upload/f_auto,q_auto,w_${width}/${publicId}.${format}`;
 }
 
-async function searchByTag(tag) {
+async function searchByExpression(expression) {
   const cloudName = env.CLOUDINARY_CLOUD_NAME;
   const apiKey = env.CLOUDINARY_API_KEY;
   const apiSecret = env.CLOUDINARY_API_SECRET;
@@ -22,7 +22,7 @@ async function searchByTag(tag) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        expression: `tags=${tag}`,
+        expression,
         with_field: ["context"],
         max_results: 100,
       }),
@@ -31,7 +31,7 @@ async function searchByTag(tag) {
 
   if (!response.ok) {
     console.error(
-      `Cloudinary search failed for tag "${tag}": ${response.status} ${await response.text()}`
+      `Cloudinary search failed for expression "${expression}": ${response.status} ${await response.text()}`
     );
     return [];
   }
@@ -40,26 +40,8 @@ async function searchByTag(tag) {
   return resources ?? [];
 }
 
-/**
- * Fetches images tagged with the given gallery tag from Cloudinary,
- * sorted by the "order" context metadata set per-image in the console.
- */
-export async function getGalleryImages(
-  tag,
-  { limit, defaultAlt = "Photography" } = {}
-) {
-  const cached = cache.get(tag);
-  const now = Date.now();
-
-  let resources;
-  if (cached && cached.expiresAt > now) {
-    resources = cached.resources;
-  } else {
-    resources = await searchByTag(tag);
-    cache.set(tag, { resources, expiresAt: now + CACHE_TTL_MS });
-  }
-
-  const images = resources
+function resourcesToImages(resources, defaultAlt) {
+  return resources
     .map((resource) => {
       const context = resource.context?.custom ?? {};
       const order = Number(context.order);
@@ -74,6 +56,49 @@ export async function getGalleryImages(
       };
     })
     .sort((a, b) => a.order - b.order || a.publicId.localeCompare(b.publicId));
+}
 
-  return typeof limit === "number" ? images.slice(0, limit) : images;
+async function fetchResources(expression) {
+  const cached = cache.get(expression);
+  const now = Date.now();
+
+  if (cached && cached.expiresAt > now) {
+    return cached.resources;
+  }
+
+  const resources = await searchByExpression(expression);
+  cache.set(expression, { resources, expiresAt: now + CACHE_TTL_MS });
+  return resources;
+}
+
+/**
+ * Fetches images tagged with the given gallery tag from Cloudinary,
+ * sorted by the "order" context metadata set per-image in the console.
+ *
+ * If `featuredTag` is given, images that also carry that tag are
+ * preferred (in "order" among themselves) and take the front slots,
+ * falling back to the regular gallery order to fill any remaining
+ * slots up to `limit`. This lets specific images be pinned to a
+ * preview (e.g. the home page) without changing the full gallery order.
+ */
+export async function getGalleryImages(
+  tag,
+  { limit, defaultAlt = "Photography", featuredTag } = {}
+) {
+  const resources = await fetchResources(`tags=${tag}`);
+  const images = resourcesToImages(resources, defaultAlt);
+
+  if (!featuredTag) {
+    return typeof limit === "number" ? images.slice(0, limit) : images;
+  }
+
+  const featuredResources = await fetchResources(
+    `tags=${tag} AND tags=${featuredTag}`
+  );
+  const featuredImages = resourcesToImages(featuredResources, defaultAlt);
+  const featuredIds = new Set(featuredImages.map((image) => image.publicId));
+  const rest = images.filter((image) => !featuredIds.has(image.publicId));
+  const ordered = [...featuredImages, ...rest];
+
+  return typeof limit === "number" ? ordered.slice(0, limit) : ordered;
 }
