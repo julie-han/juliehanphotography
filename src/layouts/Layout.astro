@@ -3,7 +3,31 @@ import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import "../styles/global.css";
 
-const { title = "Julie Han Photography" } = Astro.props;
+const {
+  title = "Julie Han Photography",
+  description = "Julie Han Photography, wedding, engagement, and family photography based in Erie, PA, available wherever your story takes you.",
+  image = "/images/hero-1.jpg",
+} = Astro.props;
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.url);
+const ogImageURL = new URL(image, Astro.url);
+const siteURL = Astro.site ?? new URL("/", Astro.url);
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  name: "Julie Han Photography",
+  description,
+  url: siteURL.href,
+  image: ogImageURL.href,
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: "Erie",
+    addressRegion: "PA",
+    addressCountry: "US",
+  },
+  sameAs: ["https://www.instagram.com/juliehanphotography/"],
+};
 ---
 
 <!doctype html>
@@ -12,7 +36,28 @@ const { title = "Julie Han Photography" } = Astro.props;
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="canonical" href={canonicalURL} />
     <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#fdfcfb" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Julie Han Photography" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImageURL} />
+    <meta property="og:url" content={canonicalURL} />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageURL} />
+
+    <script
+      type="application/ld+json"
+      is:inline
+      set:html={JSON.stringify(structuredData)}
+    />
   </head>
 
   <body>
