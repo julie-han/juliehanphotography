@@ -3,9 +3,9 @@ import { env } from "cloudflare:workers";
 const CACHE_TTL_MS = 5 * 60 * 1000;
 const cache = new Map();
 
-function buildImageUrl(publicId, format, width = 1600) {
+function buildImageUrl(publicId, format, version, width = 1600) {
   const cloudName = env.CLOUDINARY_CLOUD_NAME;
-  return `https://res.cloudinary.com/${cloudName}/image/upload/f_auto,q_auto,w_${width}/${publicId}.${format}`;
+  return `https://res.cloudinary.com/${cloudName}/image/upload/f_auto,q_auto,w_${width}/v${version}/${publicId}.${format}`;
 }
 
 async function searchByExpression(expression) {
@@ -47,7 +47,7 @@ function resourcesToImages(resources, defaultAlt) {
       const order = Number(context.order);
 
       return {
-        src: buildImageUrl(resource.public_id, resource.format),
+        src: buildImageUrl(resource.public_id, resource.format, resource.version),
         alt: context.alt || defaultAlt,
         orientation:
           resource.height > resource.width ? "portrait" : "landscape",
