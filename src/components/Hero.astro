@@ -41,6 +41,12 @@ const slides = await getGalleryImages("hero", {
 
   let current = 0;
 
+  if (images.length > 0) {
+    images[current].classList.remove("active");
+    current = Math.floor(Math.random() * images.length);
+    images[current].classList.add("active");
+  }
+
   if (images.length > 1) {
     setInterval(() => {
       images[current].classList.remove("active");
