@@ -4,9 +4,15 @@ import PortfolioSection from "../components/PortfolioSection.astro";
 import { getGalleryImages } from "../lib/cloudinary.js";
 
 const [weddings, engagements, other] = await Promise.all([
-  getGalleryImages("weddings", { defaultAlt: "Wedding photography" }),
-  getGalleryImages("engagements", { defaultAlt: "Engagement photography" }),
-  getGalleryImages("other"),
+  getGalleryImages("weddings", {
+    defaultAlt: "Wedding photography",
+    byFolder: true,
+  }),
+  getGalleryImages("engagements", {
+    defaultAlt: "Engagement photography",
+    byFolder: true,
+  }),
+  getGalleryImages("other", { byFolder: true }),
 ]);
 ---
 

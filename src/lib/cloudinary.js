@@ -83,9 +83,10 @@ async function fetchResources(expression) {
  */
 export async function getGalleryImages(
   tag,
-  { limit, defaultAlt = "Photography", featuredTag } = {}
+  { limit, defaultAlt = "Photography", featuredTag, byFolder = false } = {}
 ) {
-  const resources = await fetchResources(`tags=${tag}`);
+  const baseExpression = byFolder ? `folder=${tag}` : `tags=${tag}`;
+  const resources = await fetchResources(baseExpression);
   const images = resourcesToImages(resources, defaultAlt);
 
   if (!featuredTag) {
@@ -93,7 +94,7 @@ export async function getGalleryImages(
   }
 
   const featuredResources = await fetchResources(
-    `tags=${tag} AND tags=${featuredTag}`
+    `${baseExpression} AND tags=${featuredTag}`
   );
   const featuredImages = resourcesToImages(featuredResources, defaultAlt);
   const featuredIds = new Set(featuredImages.map((image) => image.publicId));

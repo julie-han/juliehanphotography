@@ -10,13 +10,19 @@ const [weddings, engagements, other] = await Promise.all([
     limit: 3,
     defaultAlt: "Wedding photography",
     featuredTag: "home-preview",
+    byFolder: true,
   }),
   getGalleryImages("engagements", {
     limit: 3,
     defaultAlt: "Engagement photography",
     featuredTag: "home-preview",
+    byFolder: true,
   }),
-  getGalleryImages("other", { limit: 3, featuredTag: "home-preview" }),
+  getGalleryImages("other", {
+    limit: 3,
+    featuredTag: "home-preview",
+    byFolder: true,
+  }),
 ]);
 ---
 
